@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.App {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.post {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid fuchsia;
+    padding: 15px;
+    margin-top: 20px;
+}
