@@ -12,8 +12,8 @@ export const PostsList: React.FC<PropsType> = ({post, title, deletePost}) => {
     return (
         <div>
             <h1 style={{textAlign: 'center'}}>{title}</h1>
-            {post.map(p => {
-                return <PostItem key={p.id} post={p} deletePost={deletePost}/>
+            {post.map((p, index) => {
+                return <PostItem key={p.id} index={index} post={p} deletePost={deletePost}/>
             })}
         </div>
     );
