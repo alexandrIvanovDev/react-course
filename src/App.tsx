@@ -4,6 +4,7 @@ import {PostsList} from './components/PostList';
 import {PostForm} from './components/PostForm';
 import {PostFilter} from './components/PostFilter';
 import {MyModal} from './components/UI/modal/MyModal';
+import {MyButton} from './components/UI/button/MyButton';
 
 export type PostType = {
     id: number
@@ -33,6 +34,8 @@ function App() {
 
     const [filter, setFilter] = useState<FilterType>({sort: '', query: ''})
 
+    const [isModalActive, setIsModalActive] = useState(false)
+
     const sortedPosts = useMemo(() => {
         if (filter.sort) {
             return [...posts].sort((a: any, b: any) => a[filter.sort].localeCompare(b[filter.sort]))
@@ -50,12 +53,21 @@ function App() {
 
     const createPost = (post: PostType) => {
         setPosts([...posts, post])
+        closeModal()
     }
+
+    const openModal = () => {
+        setIsModalActive(true)
+    }
+
+    const closeModal = () => setIsModalActive(false)
 
     return (
         <div className="App">
-            <MyModal>Modal Window</MyModal>
-            <PostForm createPost={createPost}/>
+            <MyModal isActive={isModalActive} closeModal={closeModal}>
+                <PostForm createPost={createPost}/>
+            </MyModal>
+            <MyButton callback={openModal}>Создать пост</MyButton>
             <hr style={{margin: '20px 0'}}/>
 
             <PostFilter filter={filter} setFilter={setFilter}/>
