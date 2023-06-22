@@ -9,20 +9,20 @@ type PropsType = {
 
 export const PostForm: React.FC<PropsType> = ({createPost}) => {
 
-    const [post, setPost] = useState({title: '', description: ''})
+    const [post, setPost] = useState({title: '', body: ''})
 
     const changePostTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setPost({...post, title: e.currentTarget.value})
     }
 
     const changePostDesc = (e: ChangeEvent<HTMLInputElement>) => {
-        setPost({...post, description: e.currentTarget.value})
+        setPost({...post, body: e.currentTarget.value})
     }
 
     const addPost = () => {
         const newPost: PostType = {...post, id: Date.now()}
         createPost(newPost)
-        setPost({title: '', description: ''})
+        setPost({title: '', body: ''})
     }
 
     const submitForm = (e: FormEvent<HTMLFormElement>) => {
@@ -32,7 +32,7 @@ export const PostForm: React.FC<PropsType> = ({createPost}) => {
     return (
         <form onSubmit={submitForm}>
             <MyInput type="text" placeholder={'Название поста'} value={post.title} onChange={changePostTitle}/>
-            <MyInput type="text" placeholder={'Описание поста'} value={post.description} onChange={changePostDesc}/>
+            <MyInput type="text" placeholder={'Описание поста'} value={post.body} onChange={changePostDesc}/>
             <MyButton callback={addPost}>Добавить пост</MyButton>
         </form>
     );

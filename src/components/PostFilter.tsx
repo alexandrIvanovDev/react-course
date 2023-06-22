@@ -12,7 +12,7 @@ export const PostFilter: React.FC<PropsType> = ({filter, setFilter}) => {
 
     const options: Array<OptionType> = [
         {value: 'title', name: 'По названию'},
-        {value: 'description', name: 'По описанию'}
+        {value: 'body', name: 'По описанию'}
     ]
 
     const changeSort = (sortValue: string) => {

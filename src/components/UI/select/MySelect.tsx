@@ -18,7 +18,7 @@ export const MySelect: React.FC<PropsType> = ({defaultValue, options, value, onC
     return (
         <select className={styles.select} value={value} onChange={onChangeHandler}>
 
-            <option value="" disabled selected>{defaultValue}</option>
+            <option value="" disabled>{defaultValue}</option>
 
             {options.map(option =>
                 <option value={option.value} key={option.value}>{option.name}</option>

@@ -1,15 +1,17 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css'
 import {PostsList} from './components/PostList';
 import {PostForm} from './components/PostForm';
 import {PostFilter} from './components/PostFilter';
 import {MyModal} from './components/UI/modal/MyModal';
 import {MyButton} from './components/UI/button/MyButton';
+import axios from 'axios';
+import {usePosts} from './hooks/usePost';
 
 export type PostType = {
     id: number
     title: string
-    description: string
+    body: string
 }
 
 export type OptionType = {
@@ -24,46 +26,35 @@ export type FilterType = {
 
 function App() {
 
-    const [posts, setPosts] = useState<Array<PostType>>([
-        {id: 1, title: 'JavaScript', description: 'aaa'},
-        {id: 2, title: 'TypeScript', description: 'ffff'},
-        {id: 3, title: 'Go', description: 'rrr'},
-        {id: 4, title: 'Swift', description: 'zzz'},
-        {id: 5, title: 'Python', description: 'gdfg'}
-    ])
-
+    const [posts, setPosts] = useState<Array<PostType>>([])
     const [filter, setFilter] = useState<FilterType>({sort: '', query: ''})
-
     const [isModalActive, setIsModalActive] = useState(false)
 
-    const sortedPosts = useMemo(() => {
-        if (filter.sort) {
-            return [...posts].sort((a: any, b: any) => a[filter.sort].localeCompare(b[filter.sort]))
-        }
-        return posts
-    }, [posts, filter.sort])
+    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
 
-    const sortedAndSearchedPosts = useMemo(() => {
-        return sortedPosts.filter(p => p.title.toLowerCase().includes(filter.query))
-    }, [sortedPosts, filter.query])
-
-    const deletePost = (id: number) => {
-        setPosts(posts.filter(p => p.id !== id))
+    const fetchPosts = async () => {
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
+        setPosts(response.data)
     }
+
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    const deletePost = (id: number) => setPosts(posts.filter(p => p.id !== id))
 
     const createPost = (post: PostType) => {
         setPosts([...posts, post])
         closeModal()
     }
 
-    const openModal = () => {
-        setIsModalActive(true)
-    }
+    const openModal = () => setIsModalActive(true)
 
     const closeModal = () => setIsModalActive(false)
 
     return (
         <div className="App">
+            <MyButton callback={fetchPosts}>Get Posts</MyButton>
             <MyModal isActive={isModalActive} closeModal={closeModal}>
                 <PostForm createPost={createPost}/>
             </MyModal>

@@ -13,7 +13,7 @@ export const PostItem: React.FC<PropsType> = ({post, index, deletePost}) => {
         <div className="post">
             <div className='post-content'>
                 <strong>{index + 1}. {post.title}</strong>
-                <div>{post.description}</div>
+                <div>{post.body}</div>
             </div>
             <div className='post-btns'>
                 <MyButton callback={() => deletePost(post.id)}>Удалить</MyButton>
