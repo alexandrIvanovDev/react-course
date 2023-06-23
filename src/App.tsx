@@ -5,8 +5,10 @@ import {PostForm} from './components/PostForm';
 import {PostFilter} from './components/PostFilter';
 import {MyModal} from './components/UI/modal/MyModal';
 import {MyButton} from './components/UI/button/MyButton';
-import axios from 'axios';
 import {usePosts} from './hooks/usePost';
+import {postsAPI} from './API/postsAPI';
+import {Loader} from './components/UI/loader/Loader';
+import {useFetching} from './hooks/useFetching';
 
 export type PostType = {
     id: number
@@ -30,16 +32,20 @@ function App() {
     const [filter, setFilter] = useState<FilterType>({sort: '', query: ''})
     const [isModalActive, setIsModalActive] = useState(false)
 
-    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
+    const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+        const posts = await postsAPI.getAllPosts()
+        setPosts(posts)
+    })
 
-    const fetchPosts = async () => {
-        const response = await axios.get('https://jsonplaceholder.typicode.com/posts')
-        setPosts(response.data)
-    }
+    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
 
     useEffect(() => {
         fetchPosts()
     }, [])
+
+    console.log(fetchPosts)
+    console.log(isPostsLoading)
+    console.log(postError)
 
     const deletePost = (id: number) => setPosts(posts.filter(p => p.id !== id))
 
@@ -54,7 +60,6 @@ function App() {
 
     return (
         <div className="App">
-            <MyButton callback={fetchPosts}>Get Posts</MyButton>
             <MyModal isActive={isModalActive} closeModal={closeModal}>
                 <PostForm createPost={createPost}/>
             </MyModal>
@@ -63,7 +68,12 @@ function App() {
 
             <PostFilter filter={filter} setFilter={setFilter}/>
 
-            <PostsList posts={sortedAndSearchedPosts} title={'Посты про JS'} deletePost={deletePost}/>
+            {postError && <h1>Произошла ошибка {postError}</h1>}
+
+            {isPostsLoading
+                ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 40}}><Loader/></div>
+                : <PostsList posts={sortedAndSearchedPosts} title={'Посты про JS'} deletePost={deletePost}/>
+            }
         </div>
     )
 }
