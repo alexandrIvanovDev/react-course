@@ -1,6 +1,6 @@
 import React, {ChangeEvent} from 'react';
-import {OptionType} from '../../../App';
 import styles from './MySelect.module.css'
+import {OptionType} from '../../PostFilter';
 
 type PropsType = {
     defaultValue: string

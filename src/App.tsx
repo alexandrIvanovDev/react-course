@@ -12,11 +12,6 @@ import {useFetching} from './hooks/useFetching';
 import {getPagesCount} from './utils/pages';
 import {Pagination} from './components/UI/pagination/Pagination';
 
-export type OptionType = {
-    value: string
-    name: string
-}
-
 export type FilterType = {
     sort: string
     query: string
@@ -67,7 +62,7 @@ function App() {
             <MyButton callback={openModal}>Создать пост</MyButton>
             <hr style={{margin: '20px 0'}}/>
 
-            <PostFilter filter={filter} setFilter={setFilter}/>
+            <PostFilter filter={filter} setFilter={setFilter} limit={limit} setLimit={setLimit}/>
 
             {postError && <h1>Произошла ошибка {postError}</h1>}
 
