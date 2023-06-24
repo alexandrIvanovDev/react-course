@@ -6,15 +6,11 @@ import {PostFilter} from './components/PostFilter';
 import {MyModal} from './components/UI/modal/MyModal';
 import {MyButton} from './components/UI/button/MyButton';
 import {usePosts} from './hooks/usePost';
-import {postsAPI} from './API/postsAPI';
+import {postsAPI, PostType} from './API/postsAPI';
 import {Loader} from './components/UI/loader/Loader';
 import {useFetching} from './hooks/useFetching';
-
-export type PostType = {
-    id: number
-    title: string
-    body: string
-}
+import {getPagesCount} from './utils/pages';
+import {Pagination} from './components/UI/pagination/Pagination';
 
 export type OptionType = {
     value: string
@@ -31,21 +27,22 @@ function App() {
     const [posts, setPosts] = useState<Array<PostType>>([])
     const [filter, setFilter] = useState<FilterType>({sort: '', query: ''})
     const [isModalActive, setIsModalActive] = useState(false)
+    const [totalPages, setTotalPages] = useState(0)
+    const [limit, setLimit] = useState(10)
+    const [page, setPage] = useState(1)
 
     const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-        const posts = await postsAPI.getAllPosts()
-        setPosts(posts)
+        const response = await postsAPI.getAllPosts(limit, page)
+        setPosts(response.data)
+        const totalCount = response.headers['x-total-count']
+        setTotalPages(getPagesCount(totalCount, limit))
     })
 
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
 
     useEffect(() => {
         fetchPosts()
-    }, [])
-
-    console.log(fetchPosts)
-    console.log(isPostsLoading)
-    console.log(postError)
+    }, [page, limit])
 
     const deletePost = (id: number) => setPosts(posts.filter(p => p.id !== id))
 
@@ -57,6 +54,10 @@ function App() {
     const openModal = () => setIsModalActive(true)
 
     const closeModal = () => setIsModalActive(false)
+
+    const changePage = (page: number) => {
+        setPage(page)
+    }
 
     return (
         <div className="App">
@@ -74,6 +75,9 @@ function App() {
                 ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 40}}><Loader/></div>
                 : <PostsList posts={sortedAndSearchedPosts} title={'Посты про JS'} deletePost={deletePost}/>
             }
+
+            <Pagination page={page} changePage={changePage} totalPages={totalPages} limit={limit}/>
+
         </div>
     )
 }

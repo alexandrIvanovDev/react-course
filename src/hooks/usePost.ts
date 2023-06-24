@@ -1,10 +1,9 @@
 import {useMemo} from 'react';
-import {PostType} from '../App';
+import {PostType} from '../API/postsAPI';
 
 export const useSortedPosts = (posts: Array<PostType>, sort: string) => {
     return useMemo(() => {
         if (sort) {
-            debugger
             return [...posts].sort((a: any, b: any) => a[sort].localeCompare(b[sort]))
         }
         return posts

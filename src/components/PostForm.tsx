@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {MyInput} from './UI/input/MyInput';
 import {MyButton} from './UI/button/MyButton';
-import {PostType} from '../App';
+import {PostType} from '../API/postsAPI';
 
 type PropsType = {
     createPost: (post: PostType) => void

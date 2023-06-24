@@ -1,18 +1,17 @@
 import React from 'react';
-import {PostType} from '../App';
 import {MyButton} from './UI/button/MyButton';
+import {PostType} from '../API/postsAPI';
 
 type PropsType = {
     post: PostType
-    index: number
     deletePost: (id: number) => void
 }
 
-export const PostItem: React.FC<PropsType> = ({post, index, deletePost}) => {
+export const PostItem: React.FC<PropsType> = ({post, deletePost}) => {
     return (
         <div className="post">
             <div className='post-content'>
-                <strong>{index + 1}. {post.title}</strong>
+                <strong>{post.id}. {post.title}</strong>
                 <div>{post.body}</div>
             </div>
             <div className='post-btns'>
