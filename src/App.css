@@ -4,9 +4,20 @@
     box-sizing: border-box;
 }
 
-.App {
+#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.posts {
     width: 800px;
-    margin: 20px auto;
 }
 
 .post {

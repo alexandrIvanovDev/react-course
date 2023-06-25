@@ -1,7 +1,7 @@
 import React, {ChangeEvent} from 'react';
 import {MyInput} from './UI/input/MyInput';
 import {MySelect} from './UI/select/MySelect';
-import {FilterType} from '../App';
+import {FilterType} from '../pages/Posts';
 
 type PropsType = {
     filter: FilterType

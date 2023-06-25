@@ -1,0 +1,24 @@
+.navbar {
+    height: 50px;
+    width: 100vw;
+    background: lightgray;
+    padding: 0 40px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.links {
+
+}
+
+.link {
+    margin-right: 10px;
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
