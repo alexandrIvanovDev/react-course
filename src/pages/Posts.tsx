@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import '../App.css'
 import {postsAPI, PostType} from '../API/postsAPI';
 import {useFetching} from '../hooks/useFetching';
@@ -11,6 +11,8 @@ import {PostFilter} from '../components/PostFilter';
 import {Loader} from '../components/UI/loader/Loader';
 import {PostsList} from '../components/PostList';
 import {Pagination} from '../components/UI/pagination/Pagination';
+import {AuthContext} from '../context/authContext';
+import {Navigate} from 'react-router-dom';
 
 
 export type FilterType = {
@@ -26,6 +28,7 @@ export const Pages = () => {
     const [totalPages, setTotalPages] = useState(0)
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
+    const {isAuth} = useContext(AuthContext)
 
     const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
         const response = await postsAPI.getAllPosts(limit, page)
@@ -53,6 +56,10 @@ export const Pages = () => {
 
     const changePage = (page: number) => {
         setPage(page)
+    }
+
+    if (!isAuth) {
+        return <Navigate to={'/login'}/>
     }
 
     return (

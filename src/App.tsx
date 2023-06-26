@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import {Pages} from './pages/Posts';
@@ -6,6 +6,8 @@ import {About} from './pages/About';
 import {Navbar} from './components/UI/navbar/Navbar';
 import {NotFoundPage} from './pages/NotFoundPage';
 import {PostIdPage} from './pages/PostIdPage';
+import {Login} from './pages/Login';
+import {AuthContext} from './context/authContext';
 
 const router = createBrowserRouter([
     {
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
                 element: <About/>
             },
             {
+                path: 'login',
+                element: <Login/>
+            },
+            {
                 path: '*',
                 element: <NotFoundPage/>
             }
@@ -33,7 +39,20 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    return <RouterProvider router={router}/>
+
+    const [isAuth, setIsAuth] = useState(false)
+
+    useEffect(() => {
+        if (localStorage.getItem('auth')) {
+            setIsAuth(true)
+        }
+    }, [])
+
+    return (
+        <AuthContext.Provider value={{isAuth, setIsAuth}}>
+            <RouterProvider router={router}/>
+        </AuthContext.Provider>
+    )
 }
 
 export default App;

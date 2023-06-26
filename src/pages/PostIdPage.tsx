@@ -1,16 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {Navigate, useNavigate, useParams} from 'react-router-dom';
 import {MyButton} from '../components/UI/button/MyButton';
 import {CommentType, postsAPI, PostType} from '../API/postsAPI';
 import {Loader} from '../components/UI/loader/Loader';
 import {useFetching} from '../hooks/useFetching';
 import {CommentsBlock} from '../components/commentsBlock/CommentsBlock';
 import {PostIdBlock} from '../components/PostIdBlock/PostIdBlock';
+import {AuthContext} from '../context/authContext';
 
 export const PostIdPage = () => {
 
     const [post, setPost] = useState<PostType>()
     const [comments, setComments] = useState<Array<CommentType>>([])
+    const {isAuth} = useContext(AuthContext)
 
     const {id} = useParams()
     const navigate = useNavigate()
@@ -33,6 +35,10 @@ export const PostIdPage = () => {
         getPost()
         getComments()
     }, [])
+
+    if (!isAuth) {
+        return <Navigate to={'/login'}/>
+    }
 
     return (
         <div>
