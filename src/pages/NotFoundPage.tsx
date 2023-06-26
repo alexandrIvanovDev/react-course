@@ -7,7 +7,7 @@ export const NotFoundPage = () => {
     return (
         <div>
             <h1>404: Page not found</h1>
-            <MyButton callback={() => navigate('/')}>Назад</MyButton>
+            <MyButton callback={() => navigate('/posts')}>На главную</MyButton>
         </div>
     )
 }

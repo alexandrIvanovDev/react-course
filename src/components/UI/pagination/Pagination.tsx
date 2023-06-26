@@ -12,7 +12,6 @@ type PropsType = {
 export const Pagination: FC<PropsType> = ({page, changePage, totalPages, limit}) => {
 
     const pagesArray = useMemo(() => {
-        console.log('useMemo')
         return getPagesArray(totalPages)
     }, [limit, totalPages])
 

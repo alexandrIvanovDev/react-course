@@ -4,29 +4,8 @@
     box-sizing: border-box;
 }
 
-#root {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.app {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .posts {
     width: 800px;
-}
-
-.post {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border: 2px solid teal;
-    padding: 15px;
-    margin-top: 20px;
 }
 
 .post-enter {

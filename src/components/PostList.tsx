@@ -1,5 +1,5 @@
 import React from 'react';
-import {PostItem} from './PostsItem';
+import {PostItem} from './PostItem/PostsItem';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {PostType} from '../API/postsAPI';
 

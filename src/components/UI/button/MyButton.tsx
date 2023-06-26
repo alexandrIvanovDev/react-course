@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import styles from './MyButton.module.css'
 
 type PropsType = {
-    children: string
+    children: string | ReactNode
     callback?: () => void
 }
 
