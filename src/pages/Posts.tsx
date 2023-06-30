@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import '../App.css'
 import {postsAPI, PostType} from '../API/postsAPI';
 import {useFetching} from '../hooks/useFetching';
@@ -13,6 +13,7 @@ import {PostsList} from '../components/PostList';
 import {Pagination} from '../components/UI/pagination/Pagination';
 import {AuthContext} from '../context/authContext';
 import {Navigate} from 'react-router-dom';
+import {useObserver} from '../hooks/useObserver';
 
 
 export type FilterType = {
@@ -29,15 +30,18 @@ export const Pages = () => {
     const [limit, setLimit] = useState(10)
     const [page, setPage] = useState(1)
     const {isAuth} = useContext(AuthContext)
+    const lastElement = useRef(null)
 
     const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
         const response = await postsAPI.getAllPosts(limit, page)
-        setPosts(response.data)
+        setPosts([...posts, ...response.data])
         const totalCount = response.headers['x-total-count']
         setTotalPages(getPagesCount(totalCount, limit))
     })
 
     const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query)
+
+    useObserver(lastElement, page < totalPages, isPostsLoading, () => setPage(page + 1))
 
     useEffect(() => {
         fetchPosts()
@@ -59,7 +63,7 @@ export const Pages = () => {
     }
 
     if (!isAuth) {
-        return <Navigate to={'/login'}/>
+        return <Navigate to='/login'/>
     }
 
     return (
@@ -74,13 +78,13 @@ export const Pages = () => {
 
             {postError && <h1>Произошла ошибка {postError}</h1>}
 
-            {isPostsLoading
-                ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 40}}><Loader/></div>
-                : <PostsList posts={sortedAndSearchedPosts} title={'Посты про JS'} deletePost={deletePost}/>
-            }
+            {isPostsLoading && <div className='loader'><Loader/></div>}
+            
+            <PostsList posts={sortedAndSearchedPosts} title={'Посты про JS'} deletePost={deletePost}/>
 
             <Pagination page={page} changePage={changePage} totalPages={totalPages} limit={limit}/>
 
+            <div style={{height: 20}} ref={lastElement}/>
         </div>
     )
 }
